@@ -28,3 +28,16 @@ DATE_TIME_FORMAT = {
     "Ymd": "%Y-%m-%d",
     "ISO8601": "%Y-%m-%dT%H:%M:%S.%fZ"
 }
+
+NOTIFICATION_TYPE = {
+    "SYSTEM": "SYSTEM",
+    "EMPLOYER_VIEWED_RESUME": "EMPLOYER_VIEWED_RESUME",
+    "EMPLOYER_SAVED_RESUME": "EMPLOYER_SAVED_RESUME",
+    "APPLY_STATUS": "APPLY_STATUS",
+    "COMPANY_FOLLOWED": "COMPANY_FOLLOWED",
+    "APPLY_JOB": "APPLY_JOB",
+    "POST_VERIFY_REQUIRED": "POST_VERIFY_REQUIRED",
+    "POST_VERIFY_RESULT": "POST_VERIFY_RESULT"
+}
+
+NOTIFICATION_IMAGE_DEFAULT = "https://res.cloudinary.com/dtnpj540t/image/upload/v1683799130/my-job/images_default/notification_image_default.png"
