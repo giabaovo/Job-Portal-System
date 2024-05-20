@@ -1,3 +1,7 @@
+import firebase_admin
+
+from firebase_admin import credentials
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -160,3 +164,18 @@ DEFAULT_FROM_EMAIL = 'testing@giabaovo.com'
 EMAIL_PORT = '2525'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
+
+DOMAIN_CLIENT = {
+    "local": "http://localhost:3000/",
+    # "production": config('WEB_CLIENT_URL'),
+}
+
+# APP_ENVIRONMENT = config('APP_ENV')
+APP_ENVIRONMENT = 'local'
+
+FIREBASE_CONFIG = BASE_DIR / 'configs/firebase_config.json'
+
+cred = credentials.Certificate(FIREBASE_CONFIG)
+firebase_admin.initialize_app(cred, {
+    'databaseURL': 'https://django-job-portal-a6113-default-rtdb.asia-southeast1.firebasedatabase.app/'
+})
