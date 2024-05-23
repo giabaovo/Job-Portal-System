@@ -166,6 +166,18 @@ SOCIAL_AUTH_FACEBOOK_OAUTH2_REVOKE_TOKEN_URL = 'https://graph.facebook.com/v15.0
 SOCIAL_AUTH_FACEBOOK_KEY = '966075208326212'
 SOCIAL_AUTH_FACEBOOK_SECRET = '8bfc83531b5e369bb6587ed07da5bc94'
 
+# GOOGLE
+# Google configuration
+SOCIAL_AUTH_GOOGLE_OAUTH2_URL = 'https://accounts.google.com/o/oauth2/auth'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '860723762850-ja6s9v9f1tp474ic32o8lb5g8d24t60k.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'google-app-secret'
+
+# Define SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE to get extra permissions from Google.
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+    'https://www.googleapis.com/auth/userinfo.email',
+    'https://www.googleapis.com/auth/userinfo.profile',
+]
+
 # Define SOCIAL_AUTH_FACEBOOK_SCOPE to get extra permissions from Facebook.
 # Email is not sent by default, to get it, you must request the email permission.
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
