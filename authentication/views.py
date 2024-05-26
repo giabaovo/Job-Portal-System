@@ -2,6 +2,7 @@ import json
 import requests
 import pytz
 import datetime
+import cloudinary.uploader
 
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
@@ -26,7 +27,8 @@ from authentication.serializers import (
     CheckCredsSerializer,
     ForgotPasswordSerializer,
     ResetPasswordSerializer,
-    UpdatePasswordSerializer
+    UpdatePasswordSerializer,
+    AvatarSerializer
 )
 from authentication.models import User, ForgotPasswordToken
 from authentication.tokens_custom import email_verification_token
@@ -301,6 +303,43 @@ def change_password(request):
     return var_res.response_data(status=status.HTTP_200_OK)
 
 
+@api_view(http_method_names=['put', 'delete'])
+@permission_classes(permission_classes=[IsAuthenticated])
+def avatar(request):
+    user = request.user
+
+    if request.method == 'PUT':
+        files = request.FILES
+        serializer = AvatarSerializer(user, data=files)
+        if not serializer.is_valid():
+            return var_res.response_data(status=status.HTTP_400_BAD_REQUEST, errors=serializer.errors)
+        try:
+            serializer.save()
+        except Exception as ex:
+            helper.print_log_error('avatar put', ex)
+            return var_res.response_data(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return var_res.response_data(status=status.HTTP_200_OK, data=serializer.data)
+    elif request.method == 'DELETE':
+        try:
+            if user.avatar_public_id:
+                avatar_delete_result = cloudinary.uploader.destroy(user.avatar_public_id)
+                result = avatar_delete_result.get('result', '')
+                if result != 'ok':
+                    raise Exception('Something went wrong when delete user avatar')
+                
+            user.avatar_url = var_sys.AVATAR_DEFAULT['AVATAR']
+            user.avatar_public_id = None
+            user.save()
+        except Exception as ex:
+            helper.print_log_error('avatar delete', ex)
+            return var_res.response_data(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return var_res.response_data(status=status.HTTP_200_OK, data={
+                'avatar_url': user.avatar_url
+            })
+    else:
+        return var_res.response_data(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 @api_view(http_method_names=['post'])
 def job_seeker_register(request):

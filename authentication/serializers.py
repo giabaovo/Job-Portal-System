@@ -1,7 +1,10 @@
+import cloudinary.uploader
+
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
 from django.db import transaction
+from django.conf import settings
 
 from authentication.models import User
 
@@ -130,3 +133,32 @@ class UpdatePasswordSerializer(serializers.Serializer):
         instance.set_password(validated_data['new_password'])
         instance.save()
         return instance
+    
+
+class AvatarSerializer(serializers.ModelSerializer):
+    file = serializers.FileField(required=True, write_only=True)
+    avatar_url = serializers.CharField(required=False, max_length=300, read_only=True)
+
+    def update(self, user, validated_data):
+        file = validated_data.pop('file')
+
+        try:
+            avatar_upload_result = cloudinary.uploader.upload(file=file, 
+                                                              folder=settings.CLOUDINARY_DIRECTORY['avatar'], 
+                                                              public_id=user.id)
+            
+            avatar_public_id = avatar_upload_result.get('public_id')
+        except:
+            return None
+        else:
+            avatar_url = avatar_upload_result.get('secure_url')
+
+            user.avatar_url = avatar_url
+            user.avatar_public_id = avatar_public_id
+            user.save()
+
+            return user
+
+    class Meta:
+        model = User
+        fields = ['file', 'avatar_url']

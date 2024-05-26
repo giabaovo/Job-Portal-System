@@ -17,5 +17,7 @@ urlpatterns = [
     path('job-seeker/register/', views.job_seeker_register),
     path('employer/register/', views.employer_register),
 
-    path('active-email/<str:encode_data>/<str:token>/', views.user_active)
+    path('active-email/<str:encode_data>/<str:token>/', views.user_active),
+
+    path('avatar/', views.avatar)
 ]
