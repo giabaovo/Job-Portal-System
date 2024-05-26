@@ -1,4 +1,7 @@
 import firebase_admin
+import cloudinary
+
+from datetime import datetime
 
 from firebase_admin import credentials
 
@@ -36,6 +39,7 @@ INSTALLED_APPS = [
     'oauth2_provider',
     'social_django',
     'drf_social_oauth2',
+    'cloudinary',
 
     # Internal apps
     'authentication',
@@ -251,3 +255,19 @@ cred = credentials.Certificate(FIREBASE_CONFIG)
 firebase_admin.initialize_app(cred, {
     'databaseURL': 'https://django-job-portal-a6113-default-rtdb.asia-southeast1.firebasedatabase.app/'
 })
+
+cloudinary.config(
+    cloud_name='daroc0jtb',
+    api_key='327158413146483',
+    api_secret='ggWZYYv8kqslwq8E7bxvMc0eVeE'
+)
+
+CLOUDINARY_DIRECTORY = {
+    "avatar": f"cat-job/avatar/{datetime.now().year}/{datetime.now().month}/",
+    "cv": f"my-job/cv/{datetime.now().year}/{datetime.now().month}/",
+    "logo": f"my-job/logo/{datetime.now().year}/{datetime.now().month}/",
+    "coverImage": f"my-job/cover-image/{datetime.now().year}/{datetime.now().month}/",
+    "company_image": f"my-job/company-image/{datetime.now().year}/{datetime.now().month}/",
+    "careerImage": f"my-job/career-images/",
+    "banner": f"cat-job/banners/",
+}
