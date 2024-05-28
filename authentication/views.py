@@ -37,7 +37,7 @@ from helpers import helper
 
 from configs import variable_response as var_res, variable_system as var_sys
 
-from console.jobs import queue_mail
+from console.jobs import queue_mail, queue_auth
 
 class CustomTokenView(TokenView):
     def post(self, request, *args, **kwargs):
@@ -331,6 +331,9 @@ def avatar(request):
             user.avatar_url = var_sys.AVATAR_DEFAULT['AVATAR']
             user.avatar_public_id = None
             user.save()
+
+            if not user.has_company:
+                queue_auth.update_avatar.delay(user.id, user.avatar_url)
         except Exception as ex:
             helper.print_log_error('avatar delete', ex)
             return var_res.response_data(status=status.HTTP_500_INTERNAL_SERVER_ERROR)

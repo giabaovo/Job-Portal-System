@@ -12,6 +12,8 @@ from helpers import helper
 
 from configs import variable_system as var_sys
 
+from console.jobs import queue_auth
+
 class JobSeekerRegisterSerializer(serializers.ModelSerializer):
 
     email = serializers.EmailField(max_length=100, required=True, 
@@ -156,6 +158,9 @@ class AvatarSerializer(serializers.ModelSerializer):
             user.avatar_url = avatar_url
             user.avatar_public_id = avatar_public_id
             user.save()
+
+            if not user.has_company:
+                queue_auth.update_avatar.delay(user.id, user.avatar_url)
 
             return user
 
